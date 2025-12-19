@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇭🇰 香港政府開放數據微服務整合平台</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+        }
+        
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #283593;
+            --accent-color: #3949ab;
+            --light-color: #e8eaf6;
+            --text-color: #333;
+            --text-light: #666;
+            --border-color: #ddd;
+            --success-color: #2e7d32;
+            --error-color: #c62828;
+            --warning-color: #f9a825;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.2rem;
+            color: #fff;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 15px;
+            border-radius: var(--radius);
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding: 25px 0;
+        }
+        
+        @media (min-width: 992px) {
+            main {
+                flex-direction: row;
+            }
+        }
+        
+        .sidebar {
+            flex: 0 0 350px;
+        }
+        
+        .content {
+            flex: 1;
+            min-width: 0; /* 防止flex item溢出 */
+        }
+        
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .card-header {
+            background-color: var(--light-color);
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h2 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-header h2 i {
+            font-size: 1.2rem;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* 手風琴樣式 */
+        .accordion-category {
+            margin-bottom: 15px;
+        }
+        
+        .accordion-category-header {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .accordion-category-header:hover {
+            background-color: #d5d8f0;
+        }
+        
+        .accordion-category-header i {
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-category-header.active i {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-items {
+            padding: 10px 0 10px 20px;
+            display: none;
+        }
+        
+        .accordion-category.active .accordion-items {
+            display: block;
+        }
+        
+        .accordion-item {
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .accordion-item-header {
+            padding: 12px 15px;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        
+        .accordion-item-header:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .accordion-item-header i {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-item-header.active i {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-item.disabled .accordion-item-header {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: #f5f5f5;
+        }
+        
+        .accordion-item.disabled .item-title {
+            color: var(--text-light);
+        }
+        
+        .accordion-item.disabled .status-badge {
+            background-color: var(--error-color);
+        }
+        
+        .item-title {
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .item-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 3px;
+            margin-left: 24px;
+        }
+        
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background-color: var(--success-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .accordion-item-content {
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid var(--border-color);
+            display: none;
+        }
+        
+        .accordion-item.active .accordion-item-content {
+            display: block;
+        }
+        
+        .service-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--light-color);
+        }
+        
+        /* Iframe 樣式 */
+        .iframe-container {
+            width: 100%;
+            height: 600px;
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .iframe-header {
+            background-color: var(--light-color);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .iframe-title h3 {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .iframe-title p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 3px;
+        }
+        
+        .iframe-actions {
+            display: flex;
+            gap: 10px;
+			justify-content: end;
+        }
+        
+        .iframe-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 40px;
+            text-align: center;
+            color: var(--text-light);
+        }
+        
+        .iframe-placeholder i {
+            font-size: 4rem;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        .iframe-placeholder h4 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        iframe {
+            width: 100%;
+            height: calc(100% - 70px);
+            border: none;
+        }
+        
+        .mobile-notice {
+            display: none;
+            background-color: var(--warning-color);
+            color: #333;
+            padding: 10px 15px;
+            border-radius: var(--radius);
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 991px) {
+            .sidebar, .content {
+                flex: 1 1 100%;
+            }
+            
+            .iframe-container {
+                height: 500px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .logo {
+                justify-content: center;
+            }
+            
+            .stats {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .iframe-container {
+                height: 400px;
+            }
+            
+            .service-links {
+                flex-direction: column;
+            }
+            
+            .mobile-notice {
+                display: block;
+            }
+			
+			.hidden {
+				display: none!important;
+			}
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .card-header h2 {
+                font-size: 1.2rem;
+            }
+            
+            .iframe-container {
+                height: 350px;
+            }
+            
+            .iframe-title h3 {
+                font-size: 1.1rem;
+            }
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 0;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #e8eaf6;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Emoji 樣式調整 */
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        
+        .emoji-sm {
+            font-size: 1em;
+        }
+        
+        .category-emoji {
+            font-size: 1.1em;
+            margin-right: 8px;
+        }
+        
+        .service-emoji {
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-database logo-icon"></i><span class="emoji">🇭🇰</span>
+                    <div class="logo-text">
+                        <h1>香港政府開放數據<br/>微服務整合平台</h1>
+                    </div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="total-services">15</div>
+                        <div class="stat-label"><span class="emoji-sm">📊</span> 總服務數</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="active-services">12</div>
+                        <div class="stat-label"><span class="emoji-sm">✅</span> 有效服務</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="categories-count">6</div>
+                        <div class="stat-label"><span class="emoji-sm">🗂️</span> 分類數</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main>
+            <div class="sidebar">
+				<div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-map-marked-alt"></i> <span class="emoji">🗺️</span> 香港政府開源數據</h2>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+						<div class="mb-3">
+							<a href="https://opendata.esrichina.hk/datasets/" target="_blank" class="d-flex align-items-center gap-2 text-decoration-none">
+                                <span class="emoji">📍</span> 地圖數據
+							</a>
+						</div>
+						<div class="mb-3">
+							<a href="https://open-data.hk/" target="_blank" class="d-flex align-items-center gap-2 text-decoration-none">
+                                <span class="emoji">💾</span> 開放數據庫
+							</a>
+						</div>
+						<div class="mb-3">
+							<a href="https://data.gov.hk/tc-datasets/" target="_blank" class="d-flex align-items-center gap-2 text-decoration-none">
+                                <span class="emoji">📁</span> 政府數據集
+							</a>
+						</div>
+						<div>
+							<a href="https://portal.csdi.gov.hk/csdi-webpage/DatasetList/" target="_blank" class="d-flex align-items-center gap-2 text-decoration-none">
+                                <span class="emoji">🏢</span> CSDI 數據集
+							</a>
+						</div>
+                    </div>
+                </div>
+			
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-list"></i> <span class="emoji">📋</span> 微服務列表</h2>
+                        <div class="status-filter">
+                            <span class="status-badge"><span class="emoji-sm">👁️</span> 全部顯示</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mobile-notice">
+                            <i class="fas fa-mobile-alt"></i> <span class="emoji">📱</span> 點擊項目查看詳細資訊和預覽
+                        </div>
+                        
+                        <div id="accordion-container">
+                            <!-- 這裡會由JavaScript動態生成 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-bottom:0!important">
+                    <div class="card-header">
+                        <h2><i class="fas fa-info-circle"></i> <span class="emoji">ℹ️</span> 使用說明</h2>
+                    </div>
+                    <div class="card-body">
+                        <p><span class="emoji">1️⃣</span> 點擊分類標題展開/收合該分類下的服務</p>
+                        <p><span class="emoji">2️⃣</span> 點擊服務標題查看詳細資訊和預覽</p>
+                        <p><span class="emoji">3️⃣</span> 狀態標記：<span class="status-badge" style="display: inline-flex; align-items: center; gap: 4px; margin: 0 5px;"><span class="emoji-sm">✅</span> 有效</span>表示服務正常，<span class="status-badge" style="display: inline-flex; align-items: center; gap: 4px; margin: 0 5px; background-color: var(--error-color);"><span class="emoji-sm">❌</span> 無效</span>表示服務暫不可用</p>
+                        <p><span class="emoji">4️⃣</span> 點擊「查看服務」在新視窗打開服務，或點擊「GitHub」查看源代碼</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content">
+                <div class="card">
+                    <div class="iframe-header hidden">
+                        <div class="iframe-title">
+							<p id="iframe-service-desc"></p>
+                            <h3 id="iframe-service-title"><span class="emoji"></span></h3>
+                        </div>
+                        <div class="iframe-actions d-flex flex-column justify-content-end">
+                            <a href="#" id="github-link" class="btn btn-outline" target="_blank" style="display: none; width: 120px;">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                            <a href="#" id="service-link" class="btn" target="_blank" style="display: none; width: 120px;">
+                                <i class="fas fa-external-link-alt"></i> 查看服務
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="iframe-container hidden">
+                        <div id="iframe-placeholder" class="iframe-placeholder">
+                            <i class="fas fa-laptop-code"></i>
+                            <h4><span class="emoji">🖥️</span> 微服務預覽</h4>
+                            <p>從左側列表選擇一個服務，將在此處顯示預覽</p>
+                        </div>
+                        <iframe id="service-iframe" style="display: none;"></iframe>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-project-diagram"></i> <span class="emoji">🔗</span> 關於此項目</h2>
+                    </div>
+                    <div class="card-body">
+                        <p><span class="emoji">🎯</span> 此頁面整合了多個基於香港政府開放數據的微服務應用。每個微服務都是獨立開發，專注於特定類型的數據展示和查詢功能。</p>
+                        <p><span class="emoji">🏛️</span> 所有微服務均使用香港政府數據一線通 (data.gov.hk) 提供的開放數據，並以網頁應用形式呈現，方便公眾查閱和使用。</p>
+                        <p><span class="emoji">👨‍💻</span> 項目源代碼已開源於 GitHub，歡迎開發者貢獻和改進。</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p><span class="emoji">🇭🇰</span> 香港政府開放數據整合平台</p>
+                <p><span class="emoji">📊</span> 此項目使用香港政府數據一線通 (data.gov.hk) 提供的開放數據</p>
+                <div class="footer-links">
+                    <a href="https://github.com/mccappsheet5804-sketch" target="_blank" class="fst-italic"><span class="emoji-sm">💻</span> GitHub 組織</a>
+                </div>
+                <div class="copyright">
+                    <span class="emoji">©️</span> 2023 香港政府開放數據微服務項目<br/><span class="emoji">📚</span> 僅供演示和教育用途
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 微服務數據
+        const microservices = {
+            "hk-gov-opendata-facilities-badminton": {
+                "類別": "活動",
+                "用途": "羽毛球",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-badminton",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-badminton",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-facilities-basketball": {
+                "類別": "活動",
+                "用途": "籃球",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-basketball",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-basketball",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-edb-secondary-school-info": {
+                "類別": "學校",
+                "用途": "中學",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-edb-secondary-school-info",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-edb-secondary-school-info",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-edb-primary-school-info": {
+                "類別": "學校",
+                "用途": "小學",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-edb-primary-school-info",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-edb-primary-school-info",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-edb-kgjoinkes-kg-profile": {
+                "類別": "學校",
+                "用途": "幼稚園",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-edb-kgjoinkes-kg-profile",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-edb-kgjoinkes-kg-profile",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-facilities-ifsc": {
+                "類別": "社區設施",
+                "用途": "綜合家庭服務中心",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-ifsc",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-ifsc",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-facilities-neighbourhood-elderly-centres": {
+                "類別": "社區設施",
+                "用途": "長者鄰舍中心",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-neighbourhood-elderly-centres",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-neighbourhood-elderly-centres",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-facilities-icyscs": {
+                "類別": "社區設施",
+                "用途": "綜合青少年服務中心",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-icyscs",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-icyscs",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-edb-itmospoa-poa-schoolnet-list": {
+                "類別": "學校",
+                "用途": "小一入學學校網查詢系統",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-edb-itmospoa-poa-schoolnet-list",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-edb-itmospoa-poa-schoolnet-list",
+                },
+                "有效": false
+            },
+            "hk-gov-opendata-facilities-bbq": {
+                "類別": "活動",
+                "用途": "燒烤",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-bbq",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-bbq",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-green-minibus-route-map": {
+                "類別": "交通",
+                "用途": "專線小巴",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-green-minibus-route-map",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-green-minibus-route-map",
+                },
+                "有效": false
+            },
+            "hk-gov-opendata-search-restaurants": {
+                "類別": "飲食",
+                "用途": "餐廳食肆",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-search-restaurants",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-search-restaurants",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-metered-parking-vacancy": {
+                "類別": "車手",
+                "用途": "新式咪錶",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-metered-parking-vacancy",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-metered-parking-vacancy",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-parking-vacancy": {
+                "類別": "車手",
+                "用途": "停車場",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-parking-vacancy",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-parking-vacancy",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-hiking-trails": {
+                "類別": "活動",
+                "用途": "遠足路徑",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-hiking-trails",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-hiking-trails",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-speed-enforcement-camera": {
+                "類別": "車手",
+                "用途": "影快相",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-speed-enforcement-camera",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-speed-enforcement-camera",
+                },
+                "有效": true
+            }
+        };
+
+        // 分類對應的表情符號
+        const categoryEmojis = {
+            "活動": "⚽",
+            "學校": "🏫",
+            "社區設施": "🏘️",
+            "交通": "🚌",
+            "飲食": "🍽️",
+            "車手": "🚗"
+        };
+
+        // 服務用途對應的表情符號
+        const serviceEmojis = {
+            "羽毛球": "🏸",
+            "籃球": "🏀",
+            "中學": "👨‍🎓",
+            "小學": "👧",
+            "幼稚園": "👶",
+            "綜合家庭服務中心": "👨‍👩‍👧‍👦",
+            "長者鄰舍中心": "👴",
+            "綜合青少年服務中心": "👦",
+            "小一入學學校網查詢系統": "📚",
+            "燒烤": "🍖",
+            "專線小巴": "🚐",
+            "餐廳食肆": "🍜",
+            "新式咪錶": "🅿️",
+            "停車場": "🚗",
+            "遠足路徑": "🥾",
+            "影快相": "📸"
+        };
+
+        // 頁面加載完成後初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新統計數據
+            updateStats();
+            
+            // 生成手風琴導航
+            generateAccordion();
+            
+            // 設置事件監聽器
+            setupEventListeners();
+            
+            // 預設展開第一個分類
+            const firstCategory = document.querySelector('.accordion-category-header');
+            if (firstCategory) {
+                firstCategory.click();
+            }
+        });
+
+        // 更新統計數據
+        function updateStats() {
+            const totalServices = Object.keys(microservices).length;
+            const activeServices = Object.values(microservices).filter(service => service.有效).length;
+            const categories = new Set(Object.values(microservices).map(service => service.類別));
+            
+            document.getElementById('total-services').textContent = totalServices;
+            document.getElementById('active-services').textContent = activeServices;
+            document.getElementById('categories-count').textContent = categories.size;
+        }
+
+        // 生成手風琴導航
+        function generateAccordion() {
+            const container = document.getElementById('accordion-container');
+            container.innerHTML = '';
+            
+            // 按分類分組服務
+            const servicesByCategory = {};
+            
+            Object.entries(microservices).forEach(([id, service]) => {
+                const category = service.類別;
+                if (!servicesByCategory[category]) {
+                    servicesByCategory[category] = [];
+                }
+                servicesByCategory[category].push({ id, ...service });
+            });
+            
+            // 生成分類手風琴
+            Object.keys(servicesByCategory).forEach(category => {
+                // 分類標題
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'accordion-category';
+                
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'accordion-category-header';
+                const categoryEmoji = categoryEmojis[category] || "📁";
+                categoryHeader.innerHTML = `
+                    <span><span class="category-emoji">${categoryEmoji}</span> ${category}</span>
+                    <i class="fas fa-chevron-down"></i>
+                `;
+                
+                // 分類內的項目容器
+                const itemsContainer = document.createElement('div');
+                itemsContainer.className = 'accordion-items';
+                
+                // 按用途排序服務
+                servicesByCategory[category].sort((a, b) => a.用途.localeCompare(b.用途, 'zh-Hant'));
+                
+                // 為每個服務生成項目
+                servicesByCategory[category].forEach(service => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = `accordion-item ${service.有效 ? '' : 'disabled'}`;
+                    itemElement.dataset.id = service.id;
+                    
+                    const itemHeader = document.createElement('div');
+                    itemHeader.className = 'accordion-item-header';
+                    const serviceEmoji = serviceEmojis[service.用途] || "🔗";
+                    itemHeader.innerHTML = `
+                        <div>
+                            <div class="item-title"><span class="service-emoji">${serviceEmoji}</span> ${service.用途}</div>
+                            <div class="item-subtitle">${service.id}</div>
+                        </div>
+                        <div>
+                            <span class="status-badge">${service.有效 ? '✅ 有效' : '❌ 無效'}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    `;
+                    
+                    const itemContent = document.createElement('div');
+                    itemContent.className = 'accordion-item-content';
+                    itemContent.innerHTML = `
+                        <p><span class="emoji">📝</span> 此服務提供香港政府開放數據中關於「${service.用途}」的查詢功能。</p>
+                        <div class="service-links">
+                            <a href="${service.連結.GitHub}" class="btn btn-outline" target="_blank">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                            ${service.有效 ? 
+                                `<a href="${service.連結.EntryPoint}" class="btn" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i> 查看服務
+                                </a>` : 
+                                `<span class="btn" style="opacity: 0.6; cursor: not-allowed;">
+                                    <i class="fas fa-exclamation-circle"></i> 服務暫不可用
+                                </span>`
+                            }
+                        </div>
+                    `;
+                    
+                    itemElement.appendChild(itemHeader);
+                    itemElement.appendChild(itemContent);
+                    itemsContainer.appendChild(itemElement);
+                });
+                
+                categoryElement.appendChild(categoryHeader);
+                categoryElement.appendChild(itemsContainer);
+                container.appendChild(categoryElement);
+            });
+        }
+
+        // 設置事件監聽器
+        function setupEventListeners() {
+            // 分類標題點擊事件
+            document.addEventListener('click', function(e) {
+                // 分類標題點擊
+                if (e.target.closest('.accordion-category-header')) {
+                    const header = e.target.closest('.accordion-category-header');
+                    const category = header.parentElement;
+                    
+                    // 切換active類
+                    category.classList.toggle('active');
+                    header.classList.toggle('active');
+                    
+                    // 關閉其他分類
+                    if (category.classList.contains('active')) {
+                        document.querySelectorAll('.accordion-category').forEach(otherCategory => {
+                            if (otherCategory !== category && otherCategory.classList.contains('active')) {
+                                otherCategory.classList.remove('active');
+                                otherCategory.querySelector('.accordion-category-header').classList.remove('active');
+                            }
+                        });
+                    }
+                }
+                
+                // 服務項目標題點擊
+                if (e.target.closest('.accordion-item-header') && !e.target.closest('.accordion-item.disabled .accordion-item-header')) {
+                    const header = e.target.closest('.accordion-item-header');
+                    const item = header.parentElement;
+                    const serviceId = item.dataset.id;
+                    const service = microservices[serviceId];
+                    
+                    // 如果項目已展開，則收合
+                    if (item.classList.contains('active')) {
+                        item.classList.remove('active');
+                        header.classList.remove('active');
+                    } else {
+                        // 收合其他項目
+                        document.querySelectorAll('.accordion-item').forEach(otherItem => {
+                            if (otherItem !== item && otherItem.classList.contains('active')) {
+                                otherItem.classList.remove('active');
+                                otherItem.querySelector('.accordion-item-header').classList.remove('active');
+                            }
+                        });
+                        
+                        // 展開當前項目
+                        item.classList.add('active');
+                        header.classList.add('active');
+                        
+                        // 載入服務到iframe
+                        loadServiceIntoIframe(serviceId, service);
+                    }
+                }
+                
+                // 防止服務連結觸發項目收合
+                if (e.target.closest('.service-links a')) {
+                    e.stopPropagation();
+                }
+            });
+        }
+
+        // 載入服務到iframe
+        function loadServiceIntoIframe(serviceId, service) {
+            const iframe = document.getElementById('service-iframe');
+            const placeholder = document.getElementById('iframe-placeholder');
+            const title = document.getElementById('iframe-service-title');
+            const desc = document.getElementById('iframe-service-desc');
+            const githubLink = document.getElementById('github-link');
+            const serviceLink = document.getElementById('service-link');
+            const iframeHeader = document.querySelector('.iframe-header');
+            const iframeContainer = document.querySelector('.iframe-container');
+            
+            // 顯示iframe區域
+            iframeHeader.classList.remove('hidden');
+            // iframeContainer.classList.remove('hidden');
+            
+            // 更新標題和描述
+            const serviceEmoji = serviceEmojis[service.用途] || "🔗";
+            title.innerHTML = `<span class="emoji">${serviceEmoji}</span> ${service.用途}`;
+            desc.textContent = `${service.類別}`;
+            
+            // 更新連結
+            githubLink.href = service.連結.GitHub;
+            githubLink.style.display = 'inline-flex';
+            
+            if (service.有效) {
+                serviceLink.href = service.連結.EntryPoint;
+                serviceLink.style.display = 'inline-flex';
+            } else {
+                serviceLink.style.display = 'none';
+            }
+            
+            // 顯示iframe或placeholder
+            if (service.有效) {
+                placeholder.style.display = 'none';
+                // iframe.src = service.連結.EntryPoint;
+                // iframe.style.display = 'block';
+            } else {
+                placeholder.style.display = 'flex';
+                // iframe.style.display = 'none';
+                // iframe.src = '';
+                
+                // 更新placeholder訊息
+                placeholder.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4><span class="emoji">⚠️</span> 服務暫時不可用</h4>
+                    <p>此服務目前處於無效狀態，無法載入預覽。</p>
+                    <p><span class="emoji">🔍</span> 請查看GitHub倉庫了解詳細情況。</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
