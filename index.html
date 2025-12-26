@@ -667,21 +667,30 @@
     <script>
         // 微服務數據
         const microservices = {
-            "hk-gov-opendata-facilities-badminton": {
-                "類別": "活動",
-                "用途": "羽毛球",
+            "hk-gov-opendata-app-constructions": {
+                "類別": "工程",
+                "用途": "建築工程",
                 "連結": {
-                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-badminton",
-                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-badminton",
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-app-constructions",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-app-constructions",
                 },
                 "有效": true
             },
-            "hk-gov-opendata-facilities-basketball": {
-                "類別": "活動",
-                "用途": "籃球",
+            "hk-gov-opendata-app-sports-facilities": {
+                "類別": "設施",
+                "用途": "體育設施",
                 "連結": {
-                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-basketball",
-                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-basketball",
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-app-sports-facilities",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-app-sports-facilities",
+                },
+                "有效": true
+            },
+            "hk-gov-opendata-app-public": {
+                "類別": "設施",
+                "用途": "公共設施",
+                "連結": {
+                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-app-public",
+                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-app-public",
                 },
                 "有效": true
             },
@@ -713,7 +722,7 @@
                 "有效": true
             },
             "hk-gov-opendata-facilities-ifsc": {
-                "類別": "社區設施",
+                "類別": "設施",
                 "用途": "綜合家庭服務中心",
                 "連結": {
                     "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-ifsc",
@@ -722,7 +731,7 @@
                 "有效": true
             },
             "hk-gov-opendata-facilities-neighbourhood-elderly-centres": {
-                "類別": "社區設施",
+                "類別": "設施",
                 "用途": "長者鄰舍中心",
                 "連結": {
                     "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-neighbourhood-elderly-centres",
@@ -731,7 +740,7 @@
                 "有效": true
             },
             "hk-gov-opendata-facilities-icyscs": {
-                "類別": "社區設施",
+                "類別": "設施",
                 "用途": "綜合青少年服務中心",
                 "連結": {
                     "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-icyscs",
@@ -747,15 +756,6 @@
                     "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-edb-itmospoa-poa-schoolnet-list",
                 },
                 "有效": false
-            },
-            "hk-gov-opendata-facilities-bbq": {
-                "類別": "活動",
-                "用途": "燒烤",
-                "連結": {
-                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-facilities-bbq",
-                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-facilities-bbq",
-                },
-                "有效": true
             },
             "hk-gov-opendata-green-minibus-route-map": {
                 "類別": "交通",
@@ -802,15 +802,6 @@
                 },
                 "有效": true
             },
-            "hk-gov-opendata-app-hiking": {
-                "類別": "活動",
-                "用途": "遠足路徑",
-                "連結": {
-                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-app-hiking",
-                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-app-hiking",
-                },
-                "有效": true
-            },
             "hk-gov-opendata-app-car-monitoring-camera": {
                 "類別": "車手",
                 "用途": "交通監察攝錄機",
@@ -838,22 +829,13 @@
                 },
                 "有效": true
             },
-            "hk-gov-opendata-app-constructions": {
-                "類別": "工程",
-                "用途": "工程項目",
-                "連結": {
-                    "GitHub": "https://github.com/mccappsheet5804-sketch/hk-gov-opendata-app-constructions",
-                    "EntryPoint": "https://mccappsheet5804-sketch.github.io/hk-gov-opendata-app-constructions",
-                },
-                "有效": true
-            },
         };
 
         // 分類對應的表情符號
         const categoryEmojis = {
             "活動": "⚽",
             "學校": "🏫",
-            "社區設施": "🏘️",
+            "設施": "🏘️",
             "交通": "🚌",
             "飲食": "🍽️",
             "車手": "🚗",
@@ -863,8 +845,6 @@
 
         // 服務用途對應的表情符號
         const serviceEmojis = {
-            "羽毛球": "🏸",
-            "籃球": "🏀",
             "中學": "👨‍🎓",
             "小學": "👧",
             "幼稚園": "👶",
@@ -872,7 +852,6 @@
             "長者鄰舍中心": "👴",
             "綜合青少年服務中心": "👦",
             "小一入學學校網查詢系統": "📚",
-            "燒烤": "🍖",
             "專線小巴": "🚐",
             "餐廳食肆": "🍜",
 			"食品批發商": "🥩",
@@ -882,7 +861,9 @@
             "影快相": "📸",
 			"升降機資料": "🏢",
 			"升降機許可證資料": "📄",
-            "工程項目": "🚧",
+            "建築工程": "🚧",
+            "體育設施": "🏟️",
+            "公共設施": "🏛️",
         };
 
         // 頁面加載完成後初始化
